@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Perfil Maker - Fab Lab Rec</title>
+    <!-- 1. Carrega o Tailwind CSS para estilização -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define a fonte padrão como "Inter" */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilo customizado para o card */
+        .quiz-card {
+            background-color: #1a1c31; /* Nova cor do card */
+        }
+    </style>
+    <!-- Importa a fonte Inter do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#5f356d] text-gray-200 flex items-center justify-center min-h-screen p-4">
+
+    <!-- Container Principal do Quiz -->
+    <div id="quiz-container" class="quiz-card w-full max-w-xl p-8 rounded-xl shadow-2xl">
+        
+        <!-- Seção do Quiz (visível no início) -->
+        <div id="quiz-view">
+            <!-- Cabeçalho -->
+            <h1 class="text-3xl font-bold text-center mb-2">
+                Qual seu <span class="text-[#ff3333]">Superpoder</span> Maker?
+            </h1>
+            <p class="text-center text-gray-400 mb-8">Baseado no Ciclo da Invenção - Fab Lab Rec</p>
+
+            <!-- Pergunta Atual -->
+            <h2 id="question-text" class="text-2xl font-semibold mb-6 text-center">
+                Carregando pergunta...
+            </h2>
+
+            <!-- Botões de Resposta -->
+            <div id="answer-buttons" class="grid grid-cols-1 gap-4">
+                <!-- As respostas serão inseridas aqui pelo JavaScript -->
+            </div>
+        </div>
+
+        <!-- Seção de Resultado (oculta no início) -->
+        <div id="result-view" class="hidden text-center">
+            <h2 id="result-title" class="text-3xl font-bold mb-2">
+                <!-- Título do Resultado (ex: O Visionário Criativo) -->
+            </h2>
+            <p id="result-focus" class="text-lg italic text-gray-400 mb-6">
+                <!-- Foco do Resultado (ex: Foco na Ideação) -->
+            </p>
+            <p id="result-description" class="text-base mb-8">
+                <!-- Descrição do Resultado -->
+            </p>
+            <button id="restart-button" class="w-full bg-[#ff3333] hover:bg-[#f28020] text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200">
+                Fazer o Quiz Novamente
+            </button>
+        </div>
+
+    </div>
+
+    <!-- 2. Lógica do Quiz ("Backend" em JavaScript) -->
+    <script>
+        // --- 2.1. Definição dos Dados do Quiz ---
+
+        // Dados das Perguntas e Respostas
+        // Cada resposta está ligada a um 'profile'
+        const quizData = [
+            {
+                question: "Diante de um problema novo que ninguém sabe resolver, qual a sua primeira reação?",
+                answers: [
+                    { text: "Quero investigar! Faço perguntas, pesquiso e entrevisto pessoas.", profile: 'inspiracao' },
+                    { text: "Minha cabeça explode de ideias! Pego logo um papel para desenhar mapas mentais.", profile: 'ideacao' },
+                    { text: "Quero construir! Procuro materiais, sucata ou ferramentas para montar algo.", profile: 'prototipacao' },
+                    { text: "Chamo a galera! Acredito que conversando com o grupo vamos achar a saída.", profile: 'compartilhamento' }
+                ]
+            },
+            {
+                question: "Qual destas ferramentas você ficaria mais animado em usar agora?",
+                answers: [
+                    { text: "Um bloco de notas de repórter e um gravador.", profile: 'inspiracao' },
+                    { text: "Um quadro branco cheio de post-its coloridos.", profile: 'ideacao' },
+                    { text: "Uma impressora 3D ou uma cortadora a laser.", profile: 'prototipacao' },
+                    { text: "Um microfone e um palco para apresentar.", profile: 'compartilhamento' }
+                ]
+            },
+            {
+                question: "O projeto deu errado na primeira tentativa (o que é normal!). O que você faz?",
+                answers: [
+                    { text: "Analiso o erro. Tento entender profundamente *por que* falhou.", profile: 'inspiracao' },
+                    { text: "Penso rápido em outra alternativa criativa e diferente para contornar.", profile: 'ideacao' },
+                    { text: "Ajusto a peça, lixo, corto e colo de novo. Aprender fazendo é comigo.", profile: 'prototipacao' },
+                    { text: "Peço feedback para os colegas e mostro o erro para aprendermos juntos.", profile: 'compartilhamento' }
+                ]
+            }
+            // Adicione mais perguntas aqui se desejar
+        ];
+
+        // Dados dos Perfis de Resultado
+        const resultsData = {
+            inspiracao: {
+                title: "O Explorador Empático",
+                focus: "Foco na Inspiração",
+                description: "Você é a base do projeto! Assim como na etapa de Inspiração do Fab Lab Rec, seu superpoder é a curiosidade. Você adora pesquisar, observar e entender as necessidades reais das pessoas. Sem você, o projeto não teria propósito!",
+                colorClass: "text-[#a0cfc6]" // Light Teal
+            },
+            ideacao: {
+                title: "O Visionário Criativo",
+                focus: "Foco na Ideação",
+                description: "Você é a chama da inovação! Representando a etapa de Ideação, você tem facilidade em gerar alternativas e pensar 'fora da caixa'. Você não tem medo de ideias malucas!",
+                colorClass: "text-[#f28020]" // Orange
+            },
+            prototipacao: {
+                title: "O Mão na Massa",
+                focus: "Foco na Prototipação",
+                description: "Você é o motor da realização! Conectado à Prototipação e à cultura Hands-on, você materializa sonhos. Não tem medo de errar, testar materiais e usar ferramentas para transformar conceitos em objetos reais.",
+                colorClass: "text-[#90851c]" // Olive Green
+            },
+            compartilhamento: {
+                title: "O Conector Colaborativo",
+                focus: "Foco no Compartilhamento",
+                description: "Você é a voz do time! Essencial na etapa de Compartilhamento, você sabe que boas ideias precisam ser comunicadas e debatidas. Você facilita a troca de feedbacks e garante que todos estejam trabalhando juntos.",
+                colorClass: "text-[#ff3333]" // Bright Red
+            }
+        };
+ 
+        // --- 2.2. Lógica Principal do Quiz ---
+
+        // Referências aos elementos do HTML
+        const quizView = document.getElementById('quiz-view');
+        const resultView = document.getElementById('result-view');
+        const questionText = document.getElementById('question-text');
+        const answerButtons = document.getElementById('answer-buttons');
+
+        const resultTitle = document.getElementById('result-title');
+        const resultFocus = document.getElementById('result-focus');
+        const resultDescription = document.getElementById('result-description');
+        const restartButton = document.getElementById('restart-button');
+
+        // Estado do Quiz
+        let currentQuestionIndex;
+        let scores;
+
+        // Função para iniciar ou reiniciar o quiz
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            scores = {
+                inspiracao: 0,
+                ideacao: 0,
+                prototipacao: 0,
+                compartilhamento: 0
+            };
+            // Garante que a view do quiz esteja visível e a de resultado oculta
+            resultView.classList.add('hidden');
+            quizView.classList.remove('hidden');
+            loadQuestion();
+        }
+
+        // Função para carregar a pergunta atual
+        function loadQuestion() {
+            // Limpa as respostas anteriores
+            answerButtons.innerHTML = '';
+            
+            // Pega os dados da pergunta atual
+            const questionData = quizData[currentQuestionIndex];
+            questionText.innerText = questionData.question;
+
+            // Cria os botões de resposta
+            questionData.answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.innerText = answer.text;
+                button.classList.add(
+                    'w-full', 'bg-gray-700', 'hover:bg-[#ff3333]', 'text-white', 
+                    'font-medium', 'py-3', 'px-5', 'rounded-lg', 'transition-colors', 
+                    'duration-200', 'text-left'
+                );
+                
+                // Adiciona o evento de clique para selecionar a resposta
+                button.addEventListener('click', () => selectAnswer(answer.profile));
+                answerButtons.appendChild(button);
+            });
+        }
+
+        // Função chamada ao clicar em uma resposta
+        function selectAnswer(profile) {
+            // Adiciona ponto ao perfil selecionado
+            scores[profile]++;
+            
+            // Avança para a próxima pergunta
+            currentQuestionIndex++;
+            
+            // Verifica se o quiz terminou
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // Função para calcular e mostrar o resultado
+        function showResults() {
+            // Esconde a view do quiz e mostra a view de resultado
+            quizView.classList.add('hidden');
+            resultView.classList.remove('hidden');
+
+            // Encontra o perfil com a maior pontuação
+            let maxScore = -1;
+            let resultProfile = 'inspiracao'; // Perfil padrão
+
+            for (const profile in scores) {
+                if (scores[profile] > maxScore) {
+                    maxScore = scores[profile];
+                    resultProfile = profile;
+                }
+            }
+            
+            // Pega os dados do perfil vencedor
+            const result = resultsData[resultProfile];
+
+            // Atualiza os textos e a cor do resultado
+            resultTitle.innerText = result.title;
+            resultFocus.innerText = result.focus;
+            resultDescription.innerText = result.description;
+            
+            // Limpa classes de cor antigas e adiciona a nova
+            resultTitle.className = "text-3xl font-bold mb-2"; // Reseta
+            resultTitle.classList.add(result.colorClass);
+        }
+
+        // Adiciona o evento de clique no botão de reiniciar
+        restartButton.addEventListener('click', startQuiz);
+
+        // --- 2.3. Início do Script ---
+        // Garante que o script rode após o carregamento da página
+        document.addEventListener('DOMContentLoaded', startQuiz);
+
+    </script>
+</body>
+</html>
