@@ -2,16 +2,19 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz - Perfil Maker (Fab Lab Rec)</title>
     <!-- Carrega o Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Carrega a fonte Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Carrega as novas fontes (Baloo 2 para títulos, Sarabun para corpo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Sarabun:wght@400&display=swap" rel="stylesheet">
     <style>
-        /* Define a fonte Inter como padrão */
+        /* Define as novas fontes */
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Sarabun', sans-serif; /* Fonte do corpo */
+        }
+        .font-title {
+            font-family: 'Baloo 2', sans-serif; /* Fonte do título */
         }
         /* Estilo customizado para o card */
         .quiz-card {
@@ -21,6 +24,10 @@
         .hidden-view {
             display: none;
         }
+        /* Estiliza o input de arquivo */
+        input[type="file"] {
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body class="bg-[#5f356d] flex items-center justify-center min-h-screen p-4">
@@ -28,16 +35,61 @@
     <!-- Container Principal do Quiz -->
     <div class="quiz-card w-full max-w-2xl p-8 md:p-12 rounded-2xl shadow-2xl transition-all duration-300 text-gray-900">
 
-        <!-- 1. Visão do Quiz (Inicial) -->
-        <div id="quiz-view">
-            <!-- Logo Placeholder -->
-            <img src="https://placehold.co/200x60/5f356d/ffffff?text=FAB+LAB+LOGO&font=inter" alt="Logo Fab Lab" class="mx-auto mb-8 h-12">
+        <!-- 0. Visão de Início (NOVA) -->
+        <div id="start-view">
+            <img id="logo-start" src="https://placehold.co/200x60/5f356d/ffffff?text=FAB+LAB+LOGO&font=inter" alt="Logo Fab Lab" class="mx-auto mb-8 h-12">
+            <h1 class="font-title text-3xl font-bold text-center mb-4">
+                Quiz: Perfil Maker
+            </h1>
+            <p class="text-center text-gray-700 mb-8">Descubra seu superpoder no Ciclo da Inovação!</p>
+            <div class="space-y-4">
+                <button id="start-quiz-button" class="w-full bg-[#ff3333] hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 font-title text-lg">
+                    Começar o Quiz!
+                </button>
+                <button id="config-button" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-lg transition-colors duration-200">
+                    Configurar Imagens
+                </button>
+            </div>
+        </div>
+
+        <!-- 1. Visão de Configuração (NOVA) -->
+        <div id="config-view" class="hidden-view">
+            <h1 class="font-title text-3xl font-bold mb-6">Configurar Imagens</h1>
+            <p class="text-gray-700 mb-6 text-sm">As imagens são salvas localmente no seu navegador. Elas não são enviadas para a internet.</p>
+            
+            <div class="space-y-4 max-h-96 overflow-y-auto pr-2">
+                <!-- Configuração do Logo -->
+                <div class="flex items-center space-x-4">
+                    <img id="logo-preview" src="https://placehold.co/100x40/eeeeee/999999?text=Logo" class="h-10 w-24 object-contain border rounded">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700">Logo Principal</label>
+                        <input type="file" id="logo-input" accept="image/*" class="w-full text-gray-700"
+                               onchange="handleFileUpload(event, 'quizLogo', 'logo-preview')">
+                    </div>
+                </div>
+
+                <!-- Configuração das Perguntas (Dinâmico) -->
+                <div id="config-questions-list" class="space-y-4">
+                    <!-- Inputs das perguntas serão gerados pelo JS -->
+                </div>
+            </div>
+
+            <button id="back-to-start-button" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-lg transition-colors duration-200 mt-8">
+                Voltar ao Início
+            </button>
+        </div>
+
+
+        <!-- 2. Visão do Quiz (Atualizada) -->
+        <div id="quiz-view" class="hidden-view">
+            <!-- Logo Carregado -->
+            <img id="logo-display" src="https://placehold.co/200x60/5f356d/ffffff?text=FAB+LAB+LOGO&font=inter" alt="Logo Fab Lab" class="mx-auto mb-8 h-12">
 
             <!-- Imagem da Pergunta -->
             <img id="question-image" src="" alt="Ilustração da Pergunta" class="w-full h-48 object-cover rounded-lg mb-6 hidden-view">
 
             <!-- Pergunta Atual -->
-            <h2 id="question-text" class="text-2xl font-semibold mb-6 min-h-[50px]">
+            <h2 id="question-text" class="font-title text-2xl font-semibold mb-6 min-h-[50px]">
                 Carregando pergunta...
             </h2>
 
@@ -51,24 +103,23 @@
                 <button id="prev-button" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-lg transition-colors duration-200">
                     Voltar
                 </button>
-                <!-- O clique na resposta avança -->
             </div>
         </div>
 
-        <!-- 2. Visão de Resultado (Final) -->
+        <!-- 3. Visão de Resultado (Atualizada) -->
         <div id="result-view" class="hidden-view text-center">
             
-            <h1 class="text-3xl font-bold mb-3" id="result-title">
+            <h1 class="font-title text-3xl font-bold mb-3" id="result-title">
                 <!-- Título do Resultado -->
             </h1>
-            <p class="text-xl font-semibold mb-6" id="result-focus">
+            <p class="font-title text-xl font-semibold mb-6" id="result-focus">
                 <!-- Foco do Resultado -->
             </p>
             <p class="text-base mb-8 text-gray-700" id="result-description">
                 <!-- Descrição do Resultado -->
             </p>
 
-            <button id="restart-button" class="w-full bg-[#ff3333] hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 mt-6">
+            <button id="restart-button" class="w-full bg-[#ff3333] hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 mt-6 font-title text-lg">
                 Fazer o Quiz Novamente
             </button>
         </div>
@@ -190,11 +241,14 @@
             }
         };
  
-        // --- 2.2. Lógica Principal do Quiz ---
+        // --- 2. Lógica Principal do Quiz ---
 
         // Referências aos elementos do HTML
+        const startView = document.getElementById('start-view');
+        const configView = document.getElementById('config-view');
         const quizView = document.getElementById('quiz-view');
         const resultView = document.getElementById('result-view');
+        
         const questionText = document.getElementById('question-text');
         const answerButtons = document.getElementById('answer-buttons');
         const questionImage = document.getElementById('question-image'); // Imagem da pergunta
@@ -203,7 +257,17 @@
         const resultTitle = document.getElementById('result-title');
         const resultFocus = document.getElementById('result-focus');
         const resultDescription = document.getElementById('result-description');
+        
+        // Botões de Navegação
+        const startQuizButton = document.getElementById('start-quiz-button');
+        const configButton = document.getElementById('config-button');
+        const backToStartButton = document.getElementById('back-to-start-button');
         const restartButton = document.getElementById('restart-button');
+        
+        // Elementos de Configuração
+        const configQuestionsList = document.getElementById('config-questions-list');
+        const logoDisplay = document.getElementById('logo-display');
+        const logoStart = document.getElementById('logo-start');
 
         // Variáveis de estado do Quiz
         let currentQuestionIndex = 0;
@@ -215,14 +279,98 @@
         };
         let answerHistory = []; // Para salvar o histórico de respostas
 
+        // --- 3. Funções de Navegação e Configuração ---
+
+        // Converte arquivo para Base64 e salva no localStorage
+        function handleFileUpload(event, storageKey, previewId) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64String = e.target.result;
+                try {
+                    localStorage.setItem(storageKey, base64String);
+                    if (previewId) {
+                        document.getElementById(previewId).src = base64String;
+                    }
+                    // Atualiza o logo na tela inicial instantaneamente
+                    if (storageKey === 'quizLogo') {
+                        logoStart.src = base64String;
+                    }
+                } catch (err) {
+                    console.error("Erro ao salvar no localStorage (limite pode ter sido excedido):", err);
+                    alert("Erro ao salvar imagem. O armazenamento local pode estar cheio.");
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Carrega pré-visualizações na tela de configuração
+        function loadConfigPreviews() {
+            // Carrega Logo
+            const savedLogo = localStorage.getItem('quizLogo');
+            if (savedLogo) {
+                document.getElementById('logo-preview').src = savedLogo;
+                logoStart.src = savedLogo; // Atualiza logo da tela inicial
+                logoDisplay.src = savedLogo; // Atualiza logo do quiz
+            }
+
+            // Gera e carrega inputs das perguntas
+            configQuestionsList.innerHTML = ''; // Limpa lista antiga
+            questions.forEach((q, index) => {
+                const storageKey = `quizImage_q${index + 1}`;
+                const previewId = `q${index + 1}-preview`;
+                const savedImage = localStorage.getItem(storageKey);
+
+                const item = document.createElement('div');
+                item.className = 'flex items-center space-x-4 border-t pt-4';
+                item.innerHTML = `
+                    <img id="${previewId}" src="${savedImage || q.image}" class="h-10 w-24 object-contain border rounded">
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700">Pergunta ${index + 1}</label>
+                        <input type="file" id="q${index + 1}-input" accept="image/*" class="w-full text-gray-700"
+                               onchange="handleFileUpload(event, '${storageKey}', '${previewId}')">
+                    </div>
+                `;
+                configQuestionsList.appendChild(item);
+            });
+        }
+
+        // Funções de troca de tela
+        function showStartView() {
+            startView.classList.remove('hidden-view');
+            configView.classList.add('hidden-view');
+            quizView.classList.add('hidden-view');
+            resultView.classList.add('hidden-view');
+            // Recarrega o logo principal
+            const savedLogo = localStorage.getItem('quizLogo');
+            if (savedLogo) logoStart.src = savedLogo;
+        }
+
+        function showConfigView() {
+            startView.classList.add('hidden-view');
+            configView.classList.remove('hidden-view');
+            quizView.classList.add('hidden-view');
+            resultView.classList.add('hidden-view');
+            loadConfigPreviews(); // Carrega as imagens salvas
+        }
+
+        // --- 4. Lógica do Quiz ---
+
         // Função para iniciar ou reiniciar o quiz
         function startQuiz() {
             currentQuestionIndex = 0;
             scores = { inspiracao: 0, ideacao: 0, prototipacao: 0, compartilhamento: 0 };
             answerHistory = [];
             
+            startView.classList.add('hidden-view');
             resultView.classList.add('hidden-view');
             quizView.classList.remove('hidden-view');
+
+            // Carrega o logo no quiz
+            const savedLogo = localStorage.getItem('quizLogo');
+            if (savedLogo) logoDisplay.src = savedLogo;
             
             showQuestion();
         }
@@ -237,8 +385,12 @@
             questionText.innerHTML = question.question;
 
             // Mostra ou esconde a imagem da pergunta
-            if (question.image) {
-                questionImage.src = question.image;
+            const storageKey = `quizImage_q${currentQuestionIndex + 1}`;
+            const savedImage = localStorage.getItem(storageKey);
+            const imageUrl = savedImage || question.image;
+
+            if (imageUrl) {
+                questionImage.src = imageUrl;
                 questionImage.classList.remove('hidden-view');
             } else {
                 questionImage.classList.add('hidden-view');
@@ -324,7 +476,7 @@
             resultDescription.innerText = result.description;
             
             // Remove classes de cor antigas e adiciona a nova
-            resultFocus.className = 'text-xl font-semibold mb-6'; // Reseta
+            resultFocus.className = 'font-title text-xl font-semibold mb-6'; // Reseta
             resultFocus.classList.add(result.colorClass);
 
             // Esconde o quiz e mostra o resultado
@@ -332,16 +484,17 @@
             resultView.classList.remove('hidden-view');
         }
 
-        // --- 4. Inicialização ---
+        // --- 5. Inicialização ---
 
-        // Adiciona o evento de clique no botão de reiniciar
-        restartButton.addEventListener('click', startQuiz);
-
-        // Adiciona o evento de clique no botão "Voltar"
+        // Adiciona o evento de clique nos botões de navegação
+        startQuizButton.addEventListener('click', startQuiz);
+        configButton.addEventListener('click', showConfigView);
+        backToStartButton.addEventListener('click', showStartView);
+        restartButton.addEventListener('click', showStartView); // Reinicia voltando ao Início
         prevButton.addEventListener('click', previousQuestion);
 
         // Inicia o quiz assim que a página carrega
-        document.addEventListener('DOMContentLoaded', startQuiz);
+        document.addEventListener('DOMContentLoaded', showStartView);
 
     </script>
 </body>
