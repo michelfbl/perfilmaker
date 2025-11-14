@@ -97,79 +97,78 @@
     <script>
         // --- 1. Dados do Quiz ---
 
-        // Definição das Perguntas (NOVAS PERGUNTAS - TEMA "ESCALADA")
+        // Definição das Perguntas (NOVAS PERGUNTAS - MAIS AMPLAS)
         const questions = [
             {
-                question: "Vocês estão no 'City Tour Pedagógico' (Ato 2) visitando o Memorial JK. O que mais captura sua atenção?",
+                question: "O fio do seu carregador de celular quebrou bem na ponta. Qual sua primeira reação?",
                 answers: [
-                    { text: "A história e o 'porquê' de JK. Suas motivações, o contexto, o legado. (Sentir/Observar)", profile: "inspiracao" },
-                    { text: "A visão! A 'loucura' de imaginar e projetar uma capital inteira do zero. (Imaginar/Criar)", profile: "ideacao" },
-                    { text: "A engenharia e arquitetura. Como os prédios foram *construídos*? Os materiais usados. (Construir)", profile: "prototipacao" },
-                    { text: "O esforço coletivo. Como o projeto uniu 'Candangos' de todo o Brasil para *realizar* a obra. (Mobilizar)", profile: "compartilhamento" }
+                    { text: "Pesquiso 'por que fios de carregador quebram?' para evitar que aconteça de novo.", profile: "inspiracao" },
+                    { text: "Penso: 'E se eu inventasse um carregador sem fio que usa energia solar?'", profile: "ideacao" },
+                    { text: "Pego fita isolante, um arame e tento fazer uma 'gambiarra' para funcionar só hoje.", profile: "prototipacao" },
+                    { text: "Mando foto no grupo dos amigos/família perguntando quem tem um sobrando para me emprestar.", profile: "compartilhamento" }
                 ]
             },
             {
-                question: "É hora da dinâmica 'Mapa dos Sonhos' (Ato 1: 'EU'). Qual é sua primeira ação ao pegar os materiais (revistas, canetas)?",
+                question: "Num trabalho em grupo (escola ou faculdade), quem é você?",
                 answers: [
-                    { text: "Paro e reflito. Quais são meus valores? O que *realmente* importa para mim antes de colar algo?", profile: "inspiracao" },
-                    { text: "Começo a folhear tudo! Pego 20 imagens que me atraem, mesmo sem saber o porquê ainda.", profile: "ideacao" },
-                    { text: "Começo a *organizar* a cartolina. Crio uma linha do tempo ou 'caixas' para estruturar o mapa.", profile: "prototipacao" },
-                    { text: "Dou uma olhada no que os colegas (professores e alunos) estão fazendo para trocar ideias.", profile: "compartilhamento" }
+                    { text: "O que faz as perguntas difíceis e garante que o grupo está respondendo ao tema certo.", profile: "inspiracao" },
+                    { text: "O que tem a ideia 'diferentona' para a apresentação (ex: fazer um vídeo, um teatro).", profile: "ideacao" },
+                    { text: "O que abre o Canva ou o Google Slides e começa a montar o layout e organizar o conteúdo.", profile: "prototipacao" },
+                    { text: "O que divide as tarefas, cobra os prazos e se oferece para apresentar o trabalho.", profile: "compartilhamento" }
                 ]
             },
             {
-                question: "Dia 3, 'Sprint de Prototipagem' no Sesi Lab. O desafio é criar algo para 'o futuro da sua comunidade'. Qual sua contribuição inicial?",
+                question: "Você vê um problema crônico na sua rua ou bairro (ex: lixo acumulado, falta de sinalização). O que você pensa?",
                 answers: [
-                    { text: "Calma, pessoal. Antes de construir, vamos definir: qual é o *problema real* que estamos resolvendo?", profile: "inspiracao" },
-                    { text: "Tive uma ideia! E se a gente fizesse um app? Ou um robô? Ou um jardim vertical? Vamos listar tudo!", profile: "ideacao" },
-                    { text: "Vou buscar a cortadora a laser e papelão. Vamos *fazer* um modelo físico rápido da ideia agora!", profile: "prototipacao" },
-                    { text: "Vou organizar o time. Quem é bom em quê? Vamos definir papéis para todos entregarem o melhor.", profile: "compartilhamento" }
+                    { text: "Fico observando. Em que horários acontece? Quem são as pessoas envolvidas? Qual a raiz disso?", profile: "inspiracao" },
+                    { text: "Imagino 10 soluções: um app de denúncia, um robô-gari, uma intervenção artística...", profile: "ideacao" },
+                    { text: "Penso numa solução prática e direta: 'E se a gente mesmo pintasse uma faixa ou colocasse um cesto maior?'", profile: "prototipacao" },
+                    { text: "Vou falar com a associação de moradores. Precisamos nos organizar e cobrar uma solução.", profile: "compartilhamento" }
                 ]
             },
             {
-                question: "No seu grupo (com estudantes e professores), uma pessoa está quieta e não participa. Como você reage?",
+                question: "Qual destas frases mais te descreve no dia-a-dia?",
                 answers: [
-                    { text: "Tento conversar com ela em particular, perguntando o que ela gosta de fazer. (Escuta Ativa)", profile: "inspiracao" },
-                    { text: "Proponho uma rodada de 'ideias absurdas', onde não há certo ou errado, para quebrar o gelo.", profile: "ideacao" },
-                    { text: "Entrego a ela uma tarefa 'mão na massa' simples (ex: cortar ou colar algo) para ela se sentir parte.", profile: "prototipacao" },
-                    { text: "Crio um momento formal de rodada, convidando ela a falar: 'Fulano, o que você acha disso?'", profile: "compartilhamento" }
+                    { text: "Eu preciso entender o 'porquê' das coisas antes de agir.", profile: "inspiracao" },
+                    { text: "E se a gente fizesse de um jeito *totalmente* diferente?", profile: "ideacao" },
+                    { text: "Feito é melhor que perfeito. Vamos testar logo.", profile: "prototipacao" },
+                    { text: "Sozinho a gente vai rápido, mas junto a gente vai mais longe.", profile: "compartilhamento" }
                 ]
             },
             {
-                question: "O tema da maratona é 'Design de Futuros'. O que mais te empolga nessa ideia?",
+                question: "Você precisa de um suporte para seu celular para gravar um vídeo, mas não tem um. O que você faz?",
                 answers: [
-                    { text: "Analisar as tendências e *entender* os desafios (sociais, climáticos) que o futuro nos reserva.", profile: "inspiracao" },
-                    { text: "A liberdade de *imaginar* futuros desejáveis e radicalmente diferentes do que temos hoje.", profile: "ideacao" },
-                    { text: "O desafio de *planejar* os passos práticos e as ferramentas que precisamos *hoje* para chegar lá.", profile: "prototipacao" },
-                    { text: "A chance de *construir* esse futuro coletivamente e *inspirar* outras pessoas a se juntarem a nós.", profile: "compartilhamento" }
-                ]
-            },
-            // --- NOVAS PERGUNTAS ---
-            {
-                question: "A jornada tem 4 mentores (Design de Futuros, Maker, Inovação Social, Desenvolvimento Pessoal). De qual mentor você buscaria ajuda primeiro?",
-                answers: [
-                    { text: "Desenvolvimento Pessoal: para me ajudar a entender meus valores e emoções (Ato 1: 'EU').", profile: "inspiracao" },
-                    { text: "Design de Futuros: para me ajudar a ter ideias disruptivas e 'sonhar grande'.", profile: "ideacao" },
-                    { text: "Maker: para me ensinar a usar as ferramentas do Sesi Lab e tirar a ideia do papel.", profile: "prototipacao" },
-                    { text: "Inovação Social: para me ajudar a conectar meu projeto com a comunidade e engajar pessoas.", profile: "compartilhamento" }
+                    { text: "Pesquiso 10 tutoriais de 'suporte de celular caseiro' no YouTube antes de decidir o melhor.", profile: "inspiracao" },
+                    { text: "Penso: 'Posso usar um copo? Ou prender com um pregador? Ou amarrar com um barbante?'", profile: "ideacao" },
+                    { text: "Pego dois copos, uma pilha de livros e fita adesiva e monto um 'tripé' que funciona.", profile: "prototipacao" },
+                    { text: "Peço para um amigo ou familiar segurar o celular para mim enquanto eu gravo.", profile: "compartilhamento" }
                 ]
             },
             {
-                question: "A narrativa da maratona é 'EU' -> 'EU E O OUTRO' -> 'EU E O MUNDO'. Qual etapa você acha mais essencial?",
+                question: "Pense na cidade de Brasília, palco da nossa maratona. O que mais te fascina nela?",
                 answers: [
-                    { text: "O 'EU' (Ato 1). Tudo começa com o autoconhecimento; sem isso, nada faz sentido.", profile: "inspiracao" },
-                    { text: "O 'MUNDO' (Ato 3). A parte de *imaginar* novos futuros é a mais poderosa para a mudança.", profile: "ideacao" },
-                    { text: "O 'MUNDO' (Ato 3). A parte de *construir* e *fazer* é onde a mudança real acontece.", profile: "prototipacao" },
-                    { text: "O 'OUTRO' (Ato 2). A conexão, a empatia e o senso de comunidade é o que move tudo.", profile: "compartilhamento" }
+                    { text: "A história e as motivações políticas de JK para criar uma capital no interior.", profile: "inspiracao" },
+                    { text: "A utopia de Niemeyer e Lúcio Costa. A 'loucura' de desenhar uma cidade-avião do zero.", profile: "ideacao" },
+                    { text: "A engenharia. O desafio de *erguer* aqueles prédios (Catedral, Congresso) com a tecnologia da época.", profile: "prototipacao" },
+                    { text: "O movimento dos 'Candangos'. A mistura de pessoas de todo o Brasil que *construíram* a cidade juntas.", profile: "compartilhamento" }
                 ]
             },
             {
-                question: "Você volta para casa após a 'Experiência Escalada'. Qual é sua *primeira* ação inspirada pela viagem?",
+                question: "O que mais te incomoda e te move a agir?",
                 answers: [
-                    { text: "Escrever no meu 'Mapa dos Sonhos' tudo que observei, senti e aprendi sobre mim.", profile: "inspiracao" },
-                    { text: "Pegar post-its e começar a desenhar 10 ideias novas para o meu 'Projeto de Vida'.", profile: "ideacao" },
-                    { text: "Procurar materiais em casa (papelão, garrafa pet) para construir um protótipo de algo que vi no Sesi Lab.", profile: "prototipacao" },
-                    { text: "Marcar uma conversa com amigos ou família para compartilhar o que vivi e como podemos agir juntos.", profile: "compartilhamento" }
+                    { text: "Injustiça ou decisões tomadas sem entender o problema real das pessoas.", profile: "inspiracao" },
+                    { text: "Rotina, tédio e fazer as coisas 'só porque sempre foi assim'.", profile: "ideacao" },
+                    { text: "Ineficiência. Coisas quebradas, lentas ou malfeitas que ninguém se dispõe a consertar.", profile: "prototipacao" },
+                    { text: "Desorganização, falta de comunicação e quando as pessoas não colaboram umas com as outras.", profile: "compartilhamento" }
+                ]
+            },
+            {
+                question: "Você tem um sábado livre e R$ 50 no bolso. Qual o rolê mais provável?",
+                answers: [
+                    { text: "Ir a um museu, uma livraria ou visitar um bairro histórico que eu não conheço.", profile: "inspiracao" },
+                    { text: "Ir a uma loja de artesanato ou papelaria comprar materiais para um projeto criativo.", profile: "ideacao" },
+                    { text: "Ir a uma loja de ferramentas comprar algo para consertar ou 'tunar' minha bicicleta/skate/PC.", profile: "prototipacao" },
+                    { text: "Juntar com os amigos para um piquenique no parque ou organizar um encontro em casa.", profile: "compartilhamento" }
                 ]
             }
         ];
