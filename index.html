@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
     <title>Quiz - Perfil Maker (Fab Lab Rec)</title>
     <!-- Carrega o Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,38 +15,26 @@
         }
         /* Estilo customizado para o card */
         .quiz-card {
-            background-color: #1a1c31; /* Nova cor do card */
+            background-color: #ffffff; /* Fundo do card branco */
         }
         /* Esconde elementos para transição */
         .hidden-view {
             display: none;
         }
-        /* Animação simples de loading */
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .loading-spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top-color: #ff3333;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-        }
     </style>
 </head>
-<body class="bg-[#5f356d] text-gray-200 flex items-center justify-center min-h-screen p-4">
+<body class="bg-[#5f356d] flex items-center justify-center min-h-screen p-4">
 
     <!-- Container Principal do Quiz -->
-    <div class="quiz-card w-full max-w-2xl p-8 md:p-12 rounded-2xl shadow-2xl transition-all duration-300">
+    <div class="quiz-card w-full max-w-2xl p-8 md:p-12 rounded-2xl shadow-2xl transition-all duration-300 text-gray-900">
 
         <!-- 1. Visão do Quiz (Inicial) -->
         <div id="quiz-view">
-            <!-- Cabeçalho -->
-            <h1 class="text-3xl font-bold text-center mb-2">
-                Qual seu <span class="text-[#ff3333]">Superpoder</span> na Escalada?
-            </h1>
-            <p class="text-center text-gray-400 mb-8">Baseado no Ciclo da Inovação (Sebrae / Fab Lab Rec)</p>
+            <!-- Logo Placeholder -->
+            <img src="https://placehold.co/200x60/5f356d/ffffff?text=FAB+LAB+LOGO&font=inter" alt="Logo Fab Lab" class="mx-auto mb-8 h-12">
+
+            <!-- Imagem da Pergunta -->
+            <img id="question-image" src="" alt="Ilustração da Pergunta" class="w-full h-48 object-cover rounded-lg mb-6 hidden-view">
 
             <!-- Pergunta Atual -->
             <h2 id="question-text" class="text-2xl font-semibold mb-6 min-h-[50px]">
@@ -57,37 +45,30 @@
             <div id="answer-buttons" class="space-y-4">
                 <!-- Botões serão gerados pelo JavaScript -->
             </div>
+
+            <!-- Botão de Navegação (Voltar) -->
+            <div class="flex justify-between mt-10">
+                <button id="prev-button" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-lg transition-colors duration-200">
+                    Voltar
+                </button>
+                <!-- O clique na resposta avança -->
+            </div>
         </div>
 
         <!-- 2. Visão de Resultado (Final) -->
         <div id="result-view" class="hidden-view text-center">
-            <h1 id="result-title" class="text-3xl font-bold mb-3">
+            
+            <h1 class="text-3xl font-bold mb-3" id="result-title">
                 <!-- Título do Resultado -->
             </h1>
-            <p id="result-focus" class="text-xl font-semibold mb-6 text-[#a0cfc6]">
+            <p class="text-xl font-semibold mb-6" id="result-focus">
                 <!-- Foco do Resultado -->
             </p>
-            <p id="result-description" class="text-base mb-8">
+            <p class="text-base mb-8 text-gray-700" id="result-description">
                 <!-- Descrição do Resultado -->
             </p>
 
-            <!-- Botão ✨ API do Gemini ✨ -->
-            <button id="gemini-challenge-button" class="w-full bg-[#f28020] hover:bg-opacity-80 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 mb-4 flex items-center justify-center space-x-2">
-                <span>✨</span>
-                <span>Me dê um desafio (Projeto de Vida)!</span>
-            </button>
-
-            <!-- Loading Spinner (Gemini) -->
-            <div id="gemini-loading" class="hidden-view flex justify-center items-center space-x-2 my-4">
-                <div class="loading-spinner"></div>
-                <span class="text-gray-400">Pensando em um desafio...</span>
-            </div>
-
-            <!-- Resposta do Gemini -->
-            <div id="gemini-response" class="mt-6 text-left p-4 bg-gray-800 rounded-lg hidden-view whitespace-pre-wrap"></div>
-
-
-            <button id="restart-button" class="w-full bg-[#ff3333] hover:bg-opacity-80 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 mt-6">
+            <button id="restart-button" class="w-full bg-[#ff3333] hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 mt-6">
                 Fazer o Quiz Novamente
             </button>
         </div>
@@ -97,10 +78,11 @@
     <script>
         // --- 1. Dados do Quiz ---
 
-        // Definição das Perguntas (NOVAS PERGUNTAS - MAIS AMPLAS)
+        // Definição das Perguntas (COM IMAGENS)
         const questions = [
             {
                 question: "O fio do seu carregador de celular quebrou bem na ponta. Qual sua primeira reação?",
+                image: "https://placehold.co/600x400/f28020/ffffff?text=Gambiarra", // Placeholder
                 answers: [
                     { text: "Pesquiso 'por que fios de carregador quebram?' para evitar que aconteça de novo.", profile: "inspiracao" },
                     { text: "Penso: 'E se eu inventasse um carregador sem fio que usa energia solar?'", profile: "ideacao" },
@@ -110,6 +92,7 @@
             },
             {
                 question: "Num trabalho em grupo (escola ou faculdade), quem é você?",
+                image: "https://placehold.co/600x400/a0cfc6/ffffff?text=Trabalho+em+Grupo", // Placeholder
                 answers: [
                     { text: "O que faz as perguntas difíceis e garante que o grupo está respondendo ao tema certo.", profile: "inspiracao" },
                     { text: "O que tem a ideia 'diferentona' para a apresentação (ex: fazer um vídeo, um teatro).", profile: "ideacao" },
@@ -119,6 +102,7 @@
             },
             {
                 question: "Você vê um problema crônico na sua rua ou bairro (ex: lixo acumulado, falta de sinalização). O que você pensa?",
+                image: "https://placehold.co/600x400/90851c/ffffff?text=Problema+Urbano", // Placeholder
                 answers: [
                     { text: "Fico observando. Em que horários acontece? Quem são as pessoas envolvidas? Qual a raiz disso?", profile: "inspiracao" },
                     { text: "Imagino 10 soluções: um app de denúncia, um robô-gari, uma intervenção artística...", profile: "ideacao" },
@@ -128,6 +112,7 @@
             },
             {
                 question: "Qual destas frases mais te descreve no dia-a-dia?",
+                image: "https://placehold.co/600x400/ff3333/ffffff?text=Personalidade", // Placeholder
                 answers: [
                     { text: "Eu preciso entender o 'porquê' das coisas antes de agir.", profile: "inspiracao" },
                     { text: "E se a gente fizesse de um jeito *totalmente* diferente?", profile: "ideacao" },
@@ -137,6 +122,7 @@
             },
             {
                 question: "Você precisa de um suporte para seu celular para gravar um vídeo, mas não tem um. O que você faz?",
+                image: "https://placehold.co/600x400/5f356d/ffffff?text=Suporte+Caseiro", // Placeholder
                 answers: [
                     { text: "Pesquiso 10 tutoriais de 'suporte de celular caseiro' no YouTube antes de decidir o melhor.", profile: "inspiracao" },
                     { text: "Penso: 'Posso usar um copo? Ou prender com um pregador? Ou amarrar com um barbante?'", profile: "ideacao" },
@@ -146,6 +132,7 @@
             },
             {
                 question: "Pense na cidade de Brasília, palco da nossa maratona. O que mais te fascina nela?",
+                image: "https://placehold.co/600x400/1a1c31/ffffff?text=Brasília", // Placeholder
                 answers: [
                     { text: "A história e as motivações políticas de JK para criar uma capital no interior.", profile: "inspiracao" },
                     { text: "A utopia de Niemeyer e Lúcio Costa. A 'loucura' de desenhar uma cidade-avião do zero.", profile: "ideacao" },
@@ -155,6 +142,7 @@
             },
             {
                 question: "O que mais te incomoda e te move a agir?",
+                image: "https://placehold.co/600x400/f28020/ffffff?text=Motivação", // Placeholder
                 answers: [
                     { text: "Injustiça ou decisões tomadas sem entender o problema real das pessoas.", profile: "inspiracao" },
                     { text: "Rotina, tédio e fazer as coisas 'só porque sempre foi assim'.", profile: "ideacao" },
@@ -164,6 +152,7 @@
             },
             {
                 question: "Você tem um sábado livre e R$ 50 no bolso. Qual o rolê mais provável?",
+                image: "https://placehold.co/600x400/a0cfc6/ffffff?text=Sábado+Livre", // Placeholder
                 answers: [
                     { text: "Ir a um museu, uma livraria ou visitar um bairro histórico que eu não conheço.", profile: "inspiracao" },
                     { text: "Ir a uma loja de artesanato ou papelaria comprar materiais para um projeto criativo.", profile: "ideacao" },
@@ -173,31 +162,31 @@
             }
         ];
 
-        // Definição dos Perfis de Resultado (Alinhados ao Ciclo da Inovação do doc)
+        // Definição dos Perfis de Resultado (Mantendo cores para diferenciar)
         const resultsData = {
             inspiracao: {
                 title: "O Explorador Empático",
                 focus: "Foco em Sentir e Observar",
                 description: "Você é a base do projeto! Seu superpoder é a curiosidade e a escuta ativa. Você adora investigar os 'porquês', entender as pessoas e definir o problema real antes de agir. (Alinhado ao Ato 1: 'EU')",
-                colorClass: "text-[#a0cfc6]" // Light Teal
+                colorClass: "text-[#5f356d]" // Roxo
             },
             ideacao: {
                 title: "O Visionário Criativo",
                 focus: "Foco em Imaginar e Criar",
                 description: "Você é a chama da inovação! Seu superpoder é 'imaginar futuros desejáveis'. Você pensa fora da caixa, gera múltiplas alternativas e não tem medo de ideias radicais. (Alinhado ao 'Design de Futuros')",
-                colorClass: "text-[#f28020]" // Orange
+                colorClass: "text-[#f28020]" // Laranja (da paleta anterior, para diferenciar)
             },
             prototipacao: {
                 title: "O Construtor Mão na Massa",
                 focus: "Foco em Construir e Prototipar",
                 description: "Você é o motor da realização! Seu superpoder é transformar ideias em ação. Você adora 'aprender fazendo', testar materiais e usar ferramentas (como no Sesi Lab) para tornar o futuro palpável. (Alinhado ao Ato 3: 'EU E O MUNDO')",
-                colorClass: "text-[#90851c]" // Olive Green
+                colorClass: "text-[#90851c]" // Oliva (da paleta anterior, para diferenciar)
             },
             compartilhamento: {
                 title: "O Conector Colaborativo",
                 focus: "Foco em Compartilhar e Mobilizar",
                 description: "Você é a voz do time! Seu superpoder é a empatia e o 'protagonismo juvenil'. Você une o grupo, garante que todos sejam ouvidos e sabe como comunicar uma ideia para engajar a comunidade. (Alinhao ao Ato 2: 'EU E O OUTRO')",
-                colorClass: "text-[#ff3333]" // Bright Red
+                colorClass: "text-[#ff3333]" // Vermelho
             }
         };
  
@@ -208,16 +197,13 @@
         const resultView = document.getElementById('result-view');
         const questionText = document.getElementById('question-text');
         const answerButtons = document.getElementById('answer-buttons');
+        const questionImage = document.getElementById('question-image'); // Imagem da pergunta
+        const prevButton = document.getElementById('prev-button'); // Botão Voltar
 
         const resultTitle = document.getElementById('result-title');
         const resultFocus = document.getElementById('result-focus');
         const resultDescription = document.getElementById('result-description');
         const restartButton = document.getElementById('restart-button');
-
-        // Referências aos novos elementos do Gemini
-        const geminiChallengeButton = document.getElementById('gemini-challenge-button');
-        const geminiLoading = document.getElementById('gemini-loading');
-        const geminiResponse = document.getElementById('gemini-response');
 
         // Variáveis de estado do Quiz
         let currentQuestionIndex = 0;
@@ -227,22 +213,16 @@
             prototipacao: 0,
             compartilhamento: 0
         };
-        let currentProfileKey = ''; // Armazena o perfil atual para a chamada da API
+        let answerHistory = []; // Para salvar o histórico de respostas
 
         // Função para iniciar ou reiniciar o quiz
         function startQuiz() {
             currentQuestionIndex = 0;
             scores = { inspiracao: 0, ideacao: 0, prototipacao: 0, compartilhamento: 0 };
-            currentProfileKey = '';
+            answerHistory = [];
             
-            // Garante que a visão de resultado esteja escondida e a de quiz visível
             resultView.classList.add('hidden-view');
             quizView.classList.remove('hidden-view');
-
-            // Esconde os elementos do Gemini
-            geminiResponse.classList.add('hidden-view');
-            geminiLoading.classList.add('hidden-view');
-            geminiResponse.innerText = '';
             
             showQuestion();
         }
@@ -256,32 +236,69 @@
             const question = questions[currentQuestionIndex];
             questionText.innerHTML = question.question;
 
+            // Mostra ou esconde a imagem da pergunta
+            if (question.image) {
+                questionImage.src = question.image;
+                questionImage.classList.remove('hidden-view');
+            } else {
+                questionImage.classList.add('hidden-view');
+            }
+
             // Cria os botões de resposta
             question.answers.forEach(answer => {
                 const button = document.createElement('button');
                 button.innerHTML = answer.text;
                 button.classList.add(
-                    'w-full', 'bg-gray-700', 'hover:bg-[#ff3333]', 'text-white', 
-                    'font-medium', 'py-3', 'px-5', 'rounded-lg', 'transition-colors', 
-                    'duration-200', 'text-left'
+                    'w-full', 'bg-gray-100', 'hover:bg-[#ff3333]', 'hover:text-white', 
+                    'text-gray-800', 'font-medium', 'py-3', 'px-5', 'rounded-lg', 
+                    'transition-colors', 'duration-200', 'text-left', 'border', 'border-gray-200'
                 );
                 
                 // Adiciona o evento de clique
                 button.addEventListener('click', () => selectAnswer(answer.profile));
                 answerButtons.appendChild(button);
             });
+
+            // Atualiza o estado do botão "Voltar"
+            updatePrevButtonState();
         }
 
         // Função chamada ao selecionar uma resposta
         function selectAnswer(profile) {
             scores[profile]++;
+            answerHistory.push(profile); // Salva a resposta
             currentQuestionIndex++;
 
-            // Verifica se o quiz terminou
             if (currentQuestionIndex < questions.length) {
                 showQuestion();
             } else {
                 showResult();
+            }
+        }
+
+        // Função para voltar à pergunta anterior
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                
+                // Remove a última resposta da pontuação
+                const lastAnswerProfile = answerHistory.pop();
+                if (lastAnswerProfile) {
+                    scores[lastAnswerProfile]--;
+                }
+                
+                showQuestion();
+            }
+        }
+
+        // Função para habilitar/desabilitar o botão "Voltar"
+        function updatePrevButtonState() {
+            if (currentQuestionIndex === 0) {
+                prevButton.disabled = true;
+                prevButton.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                prevButton.disabled = false;
+                prevButton.classList.remove('opacity-50', 'cursor-not-allowed');
             }
         }
 
@@ -297,9 +314,6 @@
                     resultProfile = profile;
                 }
             }
-
-            // Armazena o perfil para a API
-            currentProfileKey = resultProfile;
 
             // Pega os dados do perfil vencedor
             const result = resultsData[resultProfile];
@@ -318,94 +332,13 @@
             resultView.classList.remove('hidden-view');
         }
 
-        // --- 3. Lógica da API do Gemini ---
-
-        // Função para chamar a API do Gemini com exponential backoff
-        async function fetchWithBackoff(url, options, retries = 3, delay = 1000) {
-            try {
-                const response = await fetch(url, options);
-                if (!response.ok) {
-                    if (response.status === 429 && retries > 0) {
-                        // Throttling, retry with backoff
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        return fetchWithBackoff(url, options, retries - 1, delay * 2);
-                    }
-                    throw new Error(`Erro na API: ${response.statusText}`);
-                }
-                return response.json();
-            } catch (error) {
-                if (retries > 0) {
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                    return fetchWithBackoff(url, options, retries - 1, delay * 2);
-                }
-                throw error;
-            }
-        }
-
-        // Lida com o clique no botão de desafio
-        async function handleGeminiChallengeClick() {
-            if (!currentProfileKey) return; // Não deve acontecer
-
-            // Mostra o loading, esconde resposta anterior
-            geminiLoading.classList.remove('hidden-view');
-            geminiResponse.classList.add('hidden-view');
-            geminiResponse.innerText = '';
-            geminiChallengeButton.disabled = true; // Desabilita o botão
-
-            const profile = resultsData[currentProfileKey];
-            
-            // Definições da API
-            const apiKey = ""; // A Chave da API será injetada pelo ambiente
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            
-            // Prompt do Sistema: Define o "personagem" da IA (Contexto da Maratona Sebrae)
-            const systemPrompt = "Você é um mentor experiente da 'Experiência Escalada' do Sebrae. Sua missão é apoiar o 'Projeto de Vida' de estudantes e professores. Use uma linguagem inspiradora, encorajadora e focada em empreendedorismo e ação. Responda em português do Brasil.";
-            
-            // Prompt do Usuário: O pedido específico (Contexto da Maratona Sebrae)
-            const userQuery = `Meu perfil na maratona é "${profile.title}" (foco em ${profile.focus}). Me dê um micro-desafio (1 hora) alinhado ao meu 'Projeto de Vida' e ao meu perfil. O desafio deve ser algo que eu possa começar a planejar ou fazer agora, com os recursos que tenho (papel, caneta, celular). Formate a resposta de forma clara.`;
-
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                systemInstruction: {
-                    parts: [{ text: systemPrompt }]
-                },
-            };
-
-            try {
-                const result = await fetchWithBackoff(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-
-                if (text) {
-                    geminiResponse.innerText = text;
-                    geminiResponse.classList.remove('hidden-view');
-                } else {
-                    throw new Error("Resposta da API inválida.");
-                }
-
-            } catch (error) {
-                console.error(error);
-                geminiResponse.innerText = "Desculpe, não consegui pensar em um desafio agora. Tente novamente em alguns instantes.";
-                geminiResponse.classList.remove('hidden-view');
-            } finally {
-                // Esconde o loading e reabilita o botão
-                geminiLoading.classList.add('hidden-view');
-                geminiChallengeButton.disabled = false;
-            }
-        }
-
-
         // --- 4. Inicialização ---
 
         // Adiciona o evento de clique no botão de reiniciar
         restartButton.addEventListener('click', startQuiz);
 
-        // Adiciona o evento de clique no botão do Gemini
-        geminiChallengeButton.addEventListener('click', handleGeminiChallengeClick);
+        // Adiciona o evento de clique no botão "Voltar"
+        prevButton.addEventListener('click', previousQuestion);
 
         // Inicia o quiz assim que a página carrega
         document.addEventListener('DOMContentLoaded', startQuiz);
