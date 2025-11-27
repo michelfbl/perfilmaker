@@ -6,85 +6,131 @@
     <title>Quiz - Perfil Maker (Fab Lab Rec)</title>
     <!-- Carrega o Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Carrega as novas fontes (Baloo 2 para títulos, Sarabun para corpo) -->
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Sarabun:wght@400&display=swap" rel="stylesheet">
+    <!-- Carrega as fontes (Baloo 2 para títulos, Sarabun para corpo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
     <style>
         /* Define as novas fontes */
         body {
-            font-family: 'Sarabun', sans-serif; /* Fonte do corpo */
+            font-family: 'Sarabun', sans-serif;
         }
         .font-title {
-            font-family: 'Baloo 2', sans-serif; /* Fonte do título */
+            font-family: 'Baloo 2', sans-serif;
         }
         /* Estilo customizado para o card */
         .quiz-card {
-            background-color: #ffffff; /* Fundo do card branco */
+            background-color: #ffffff;
         }
-        /* Esconde elementos para transição */
+        /* Classe utilitária para esconder elementos */
         .hidden-view {
             display: none;
+        }
+        /* Animação suave de entrada */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body class="bg-[#5f356d] flex items-center justify-center min-h-screen p-4">
 
     <!-- Container Principal do Quiz -->
-    <div class="quiz-card w-full max-w-2xl p-8 md:p-12 rounded-2xl shadow-2xl transition-all duration-300 text-gray-900">
+    <div class="quiz-card w-full max-w-2xl p-8 md:p-12 rounded-2xl shadow-2xl transition-all duration-300 text-gray-900 relative overflow-hidden">
 
-        <!-- 1. Visão do Quiz -->
-        <div id="quiz-view">
-            <!-- Logo Carregado (caminho relativo) -->
-            <img id="logo-display" src="./assets/logo.png" alt="Logo Fab Lab" class="mx-auto mb-8 h-12">
+        <!-- DECORAÇÃO DE FUNDO (Opcional, para dar um charme) -->
+        <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-[#ff3333] rounded-full opacity-10 pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-[#5f356d] rounded-full opacity-10 pointer-events-none"></div>
+
+        <!-- 0. TELA DE BOAS-VINDAS (NOVA) -->
+        <div id="start-view" class="fade-in text-center flex flex-col items-center justify-center min-h-[400px]">
+            <!-- Logo Grande -->
+            <img id="logo-start" src="./assets/logo.png" onerror="this.src='https://placehold.co/200x80/5f356d/ffffff?text=FAB+LAB+REC&font=roboto'" alt="Logo Fab Lab" class="mb-8 h-20 object-contain">
+            
+            <h1 class="font-title text-4xl font-bold text-[#5f356d] mb-4">
+                Olá, Maker!
+            </h1>
+            
+            <p class="text-lg text-gray-600 mb-8 max-w-md">
+                A inovação acontece quando diferentes habilidades se encontram. Você está pronto para descobrir qual é o seu papel na <strong>Experiência Escalada</strong>?
+            </p>
+
+            <button id="start-btn" class="w-full sm:w-auto bg-[#ff3333] hover:bg-red-600 text-white font-title text-xl font-bold py-4 px-10 rounded-xl shadow-lg transform transition hover:scale-105 duration-200">
+                🚀 Começar Jornada
+            </button>
+            
+            <p class="text-sm text-gray-400 mt-8">Tempo estimado: 3 minutos</p>
+        </div>
+
+        <!-- 1. VISÃO DO QUIZ -->
+        <div id="quiz-view" class="hidden-view fade-in">
+            <!-- Logo Pequeno (Cabeçalho) -->
+            <div class="flex justify-center mb-6">
+                <img src="./assets/logo.png" onerror="this.src='https://placehold.co/150x50/5f356d/ffffff?text=FAB+LAB+REC'" alt="Logo Fab Lab" class="h-8 opacity-80">
+            </div>
 
             <!-- Imagem da Pergunta -->
-            <img id="question-image" src="" alt="Ilustração da Pergunta" class="w-full h-48 object-cover rounded-lg mb-6 hidden-view">
+            <img id="question-image" src="" alt="Ilustração" class="w-full h-48 object-cover rounded-xl mb-6 shadow-md hidden-view bg-gray-100">
 
-            <!-- Pergunta Atual -->
-            <h2 id="question-text" class="font-title text-2xl font-semibold mb-6 min-h-[50px]">
-                Carregando pergunta...
+            <!-- Contador de Perguntas -->
+            <div class="text-xs font-bold text-[#ff3333] tracking-widest uppercase mb-2">
+                Pergunta <span id="current-question-num">1</span> de <span id="total-questions-num">8</span>
+            </div>
+
+            <!-- Texto da Pergunta -->
+            <h2 id="question-text" class="font-title text-2xl md:text-3xl font-bold text-gray-800 mb-8 leading-tight">
+                Carregando...
             </h2>
 
             <!-- Botões de Resposta -->
-            <div id="answer-buttons" class="space-y-4">
-                <!-- Botões serão gerados pelo JavaScript -->
+            <div id="answer-buttons" class="space-y-3">
+                <!-- Botões gerados via JS -->
             </div>
 
-            <!-- Botão de Navegação (Voltar) -->
-            <div class="flex justify-between mt-10">
-                <button id="prev-button" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-lg transition-colors duration-200">
-                    Voltar
+            <!-- Navegação -->
+            <div class="flex justify-between mt-8 pt-6 border-t border-gray-100">
+                <button id="prev-button" class="text-gray-400 hover:text-gray-600 font-semibold py-2 px-4 rounded transition-colors flex items-center gap-2">
+                    ← Voltar
                 </button>
             </div>
         </div>
 
-        <!-- 2. Visão de Resultado -->
-        <div id="result-view" class="hidden-view text-center">
+        <!-- 2. VISÃO DE RESULTADO -->
+        <div id="result-view" class="hidden-view text-center fade-in py-8">
+            <div class="mb-6 inline-block p-4 rounded-full bg-gray-50">
+                <span class="text-6xl">✨</span>
+            </div>
             
-            <h1 class="font-title text-3xl font-bold mb-3" id="result-title">
+            <h2 class="text-gray-500 font-semibold tracking-wide uppercase text-sm mb-2">Seu Perfil Maker é</h2>
+            
+            <h1 class="font-title text-3xl md:text-4xl font-bold mb-4 text-[#5f356d]" id="result-title">
                 <!-- Título do Resultado -->
             </h1>
-            <p class="font-title text-xl font-semibold mb-6" id="result-focus">
-                <!-- Foco do Resultado -->
-            </p>
-            <p class="text-base mb-8 text-gray-700" id="result-description">
+            
+            <div class="inline-block px-4 py-1 rounded-full bg-gray-100 mb-6">
+                <p class="font-title text-lg font-semibold" id="result-focus">
+                    <!-- Foco do Resultado -->
+                </p>
+            </div>
+
+            <p class="text-lg text-gray-700 mb-10 leading-relaxed" id="result-description">
                 <!-- Descrição do Resultado -->
             </p>
 
-            <button id="restart-button" class="w-full bg-[#ff3333] hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200 mt-6 font-title text-lg">
-                Fazer o Quiz Novamente
+            <button id="restart-button" class="w-full bg-gray-800 hover:bg-gray-900 text-white font-bold py-4 px-6 rounded-xl transition-colors duration-200 font-title text-lg">
+                Refazer o Quiz
             </button>
         </div>
     </div>
 
-    <!-- JavaScript - Lógica do Quiz -->
+    <!-- Lógica do Quiz -->
     <script>
-        // --- 1. Dados do Quiz ---
-
-        // Definição das Perguntas (COM CAMINHOS RELATIVOS)
+        // --- 1. Dados ---
         const questions = [
             {
                 question: "O fio do seu carregador de celular quebrou bem na ponta. Qual sua primeira reação?",
-                image: "./assets/q1.jpg", // Caminho para a imagem da P1
+                image: "./assets/q1.jpg",
                 answers: [
                     { text: "Pesquiso 'por que fios de carregador quebram?' para evitar que aconteça de novo.", profile: "inspiracao" },
                     { text: "Penso: 'E se eu inventasse um carregador sem fio que usa energia solar?'", profile: "ideacao" },
@@ -93,28 +139,28 @@
                 ]
             },
             {
-                question: "Num trabalho em grupo (escola ou faculdade), quem é você?",
-                image: "./assets/q2.png", // Caminho para a imagem da P2
+                question: "Num trabalho em grupo, quem é você?",
+                image: "./assets/q2.png",
                 answers: [
                     { text: "O que faz as perguntas difíceis e garante que o grupo está respondendo ao tema certo.", profile: "inspiracao" },
                     { text: "O que tem a ideia 'diferentona' para a apresentação.", profile: "ideacao" },
-                    { text: "O que abre o Canva ou o Google Slides e começa a montar o layout e organizar o conteúdo.", profile: "prototipacao" },
+                    { text: "O que abre o Canva ou Google Slides e começa a montar o layout e organizar o conteúdo.", profile: "prototipacao" },
                     { text: "O que divide as tarefas, cobra os prazos e se oferece para apresentar o trabalho.", profile: "compartilhamento" }
                 ]
             },
             {
-                question: "Você vê um problema crônico na sua rua ou bairro (ex: lixo acumulado, falta de sinalização). O que você pensa?",
-                image: "./assets/q3.png", // Caminho para a imagem da P3
+                question: "Você vê um problema crônico na sua rua (ex: lixo acumulado). O que você pensa?",
+                image: "./assets/q3.png",
                 answers: [
-                    { text: "Fico observando. Em que horários acontece? Quem são as pessoas envolvidas? Qual a raiz disso?", profile: "inspiracao" },
+                    { text: "Fico observando. Em que horários acontece? Quem são as pessoas? Qual a raiz disso?", profile: "inspiracao" },
                     { text: "Imagino 10 soluções: um app de denúncia, um robô-gari, uma intervenção artística...", profile: "ideacao" },
-                    { text: "Penso numa solução prática e direta: 'E se a gente mesmo pintasse uma faixa ou colocasse um cesto maior?'", profile: "prototipacao" },
+                    { text: "Penso numa solução prática: 'E se a gente pintasse uma faixa ou colocasse um cesto maior?'", profile: "prototipacao" },
                     { text: "Vou falar com a associação de moradores. Precisamos nos organizar e cobrar uma solução.", profile: "compartilhamento" }
                 ]
             },
             {
-                question: "Qual destas frases mais te descreve no dia-a-dia?",
-                image: "./assets/q4.png", // Caminho para a imagem da P4
+                question: "Qual destas frases mais te descreve?",
+                image: "./assets/q4.png",
                 answers: [
                     { text: "Eu preciso entender o 'porquê' das coisas antes de agir.", profile: "inspiracao" },
                     { text: "E se a gente fizesse de um jeito *totalmente* diferente?", profile: "ideacao" },
@@ -123,154 +169,148 @@
                 ]
             },
             {
-                question: "Você precisa de um suporte para seu celular para gravar um vídeo, mas não tem um. O que você faz?",
-                image: "./assets/q5.png", // Caminho para a imagem da P5
+                question: "Você precisa gravar um vídeo mas não tem tripé. O que você faz?",
+                image: "./assets/q5.png",
                 answers: [
-                    { text: "Pesquiso 10 tutoriais de 'suporte de celular caseiro' no YouTube antes de decidir o melhor.", profile: "inspiracao" },
-                    { text: "Penso: 'Posso usar um copo? Ou prender com um pregador? Ou amarrar com um barbante?'", profile: "ideacao" },
-                    { text: "Pego dois copos, uma pilha de livros e fita adesiva e monto um 'tripé' que funciona.", profile: "prototipacao" },
-                    { text: "Peço para um amigo ou familiar segurar o celular para mim enquanto eu gravo.", profile: "compartilhamento" }
+                    { text: "Pesquiso tutoriais de 'suporte caseiro' antes de decidir o melhor.", profile: "inspiracao" },
+                    { text: "Penso: 'Posso usar um copo? Ou prender com um pregador? Ou um barbante?'", profile: "ideacao" },
+                    { text: "Pego dois copos, livros e fita adesiva e monto um suporte agora.", profile: "prototipacao" },
+                    { text: "Peço para um amigo segurar o celular para mim.", profile: "compartilhamento" }
                 ]
             },
             {
-                question: "Pense na cidade de Brasília, palco da nossa experiência. O que mais te fascina nela?",
-                image: "./assets/q6.png", // Caminho para a imagem da P6
+                question: "Sobre Brasília, o que mais te fascina?",
+                image: "./assets/q6.png",
                 answers: [
-                    { text: "A história e as motivações políticas de JK para criar uma capital no interior.", profile: "inspiracao" },
-                    { text: "A utopia de Niemeyer e Lúcio Costa. A 'loucura' de desenhar uma cidade-avião do zero.", profile: "ideacao" },
-                    { text: "A engenharia. O desafio de *erguer* aqueles prédios (Catedral, Congresso) com a tecnologia da época.", profile: "prototipacao" },
-                    { text: "O movimento dos 'Candangos'. A mistura de pessoas de todo o Brasil que *construíram* a cidade juntas.", profile: "compartilhamento" }
+                    { text: "A história e as motivações políticas de JK.", profile: "inspiracao" },
+                    { text: "A utopia de Niemeyer e Lúcio Costa. O desenho da cidade.", profile: "ideacao" },
+                    { text: "A engenharia. O desafio de erguer aqueles prédios no meio do nada.", profile: "prototipacao" },
+                    { text: "O movimento dos 'Candangos' que construíram a cidade juntos.", profile: "compartilhamento" }
                 ]
             },
             {
-                question: "O que mais te incomoda e te move a agir?",
-                image: "./assets/q7.png", // Caminho para a imagem da P7
+                question: "O que mais te move a agir?",
+                image: "./assets/q7.png",
                 answers: [
-                    { text: "Injustiça ou decisões tomadas sem entender o problema real das pessoas.", profile: "inspiracao" },
+                    { text: "Injustiça ou decisões tomadas sem entender o problema.", profile: "inspiracao" },
                     { text: "Rotina, tédio e fazer as coisas 'só porque sempre foi assim'.", profile: "ideacao" },
-                    { text: "Ineficiência. Coisas quebradas, lentas ou malfeitas que ninguém se dispõe a consertar.", profile: "prototipacao" },
-                    { text: "Desorganização, falta de comunicação e quando as pessoas não colaboram umas com as outras.", profile: "compartilhamento" }
+                    { text: "Ineficiência. Coisas quebradas que ninguém conserta.", profile: "prototipacao" },
+                    { text: "Desorganização e falta de colaboração entre as pessoas.", profile: "compartilhamento" }
                 ]
             },
             {
-                question: "Você tem um sábado livre com R$ 50,00 no bolso. Qual o rolê mais provável?",
-                image: "./assets/q8.png", // Caminho para a imagem da P8
+                question: "Sábado livre com R$ 50,00. Qual o rolê?",
+                image: "./assets/q8.png",
                 answers: [
-                    { text: "Ir a um museu, uma livraria ou visitar um bairro histórico que eu não conheço.", profile: "inspiracao" },
-                    { text: "Ir a uma loja de artesanato ou papelaria comprar materiais para um projeto criativo.", profile: "ideacao" },
-                    { text: "Ir a uma loja de ferramentas e comprar materiais para consertar algo em casa.", profile: "prototipacao" },
-                    { text: "Juntar com os amigos para comer em algum lugar ou organizar um encontro em casa.", profile: "compartilhamento" }
+                    { text: "Museu, livraria ou visitar um bairro histórico.", profile: "inspiracao" },
+                    { text: "Loja de artesanato ou papelaria para um projeto criativo.", profile: "ideacao" },
+                    { text: "Loja de ferramentas para consertar algo em casa.", profile: "prototipacao" },
+                    { text: "Juntar com os amigos para comer ou fazer algo em casa.", profile: "compartilhamento" }
                 ]
             }
         ];
 
-        // Definição dos Perfis de Resultado
         const resultsData = {
             inspiracao: {
                 title: "O Explorador Empático",
                 focus: "Foco em Sentir e Observar",
-                description: "Você é a base do projeto! Seu superpoder é a curiosidade e a escuta ativa. Você adora investigar os 'porquês', entender as pessoas e definir o problema real antes de agir. (Alinhado ao Ato 1: 'EU')",
-                colorClass: "text-[#5f356d]" // Roxo
+                description: "Você é a base do projeto! Seu superpoder é a curiosidade e a escuta ativa. Você adora investigar os 'porquês', entender as pessoas e definir o problema real antes de agir.",
+                colorClass: "text-[#5f356d]"
             },
             ideacao: {
                 title: "O Visionário Criativo",
                 focus: "Foco em Imaginar e Criar",
-                description: "Você é a chama da inovação! Seu superpoder é 'imaginar futuros desejáveis'. Você pensa fora da caixa, gera múltiplas alternativas e não tem medo de ideias radicais. (Alinhado ao 'Design de Futuros')",
-                colorClass: "text-[#f28020]" // Laranja
+                description: "Você é a chama da inovação! Seu superpoder é imaginar futuros desejáveis. Você pensa fora da caixa, gera múltiplas alternativas e não tem medo de ideias radicais.",
+                colorClass: "text-[#f28020]"
             },
             prototipacao: {
                 title: "O Construtor Mão na Massa",
                 focus: "Foco em Construir e Prototipar",
-                description: "Você é o motor da realização! Seu superpoder é transformar ideias em ação. Você adora 'aprender fazendo', testar materiais e usar ferramentas (como no Sesi Lab) para tornar o futuro palpável. (Alinhado ao Ato 3: 'EU E O MUNDO')",
-                colorClass: "text-[#90851c]" // Oliva
+                description: "Você é o motor da realização! Seu superpoder é transformar ideias em ação. Você adora 'aprender fazendo', testar materiais e usar ferramentas para tornar o futuro palpável.",
+                colorClass: "text-[#90851c]"
             },
             compartilhamento: {
                 title: "O Conector Colaborativo",
                 focus: "Foco em Compartilhar e Mobilizar",
-                description: "Você é a voz do time! Seu superpoder é a empatia e o 'protagonismo juvenil'. Você une o grupo, garante que todos sejam ouvidos e sabe como comunicar uma ideia para engajar a comunidade. (Alinhao ao Ato 2: 'EU E O OUTRO')",
-                colorClass: "text-[#ff3333]" // Vermelho
+                description: "Você é a voz do time! Seu superpoder é a empatia e o protagonismo. Você une o grupo, garante que todos sejam ouvidos e sabe como comunicar uma ideia para engajar.",
+                colorClass: "text-[#ff3333]"
             }
         };
- 
-        // --- 2. Lógica Principal do Quiz ---
 
-        // Referências aos elementos do HTML
+        // --- 2. Elementos DOM ---
+        const startView = document.getElementById('start-view');
         const quizView = document.getElementById('quiz-view');
         const resultView = document.getElementById('result-view');
         
         const questionText = document.getElementById('question-text');
         const answerButtons = document.getElementById('answer-buttons');
-        const questionImage = document.getElementById('question-image'); 
-        const prevButton = document.getElementById('prev-button'); 
+        const questionImage = document.getElementById('question-image');
+        const prevButton = document.getElementById('prev-button');
+        const currentQNum = document.getElementById('current-question-num');
+        const totalQNum = document.getElementById('total-questions-num');
 
-        const resultTitle = document.getElementById('result-title');
-        const resultFocus = document.getElementById('result-focus');
-        const resultDescription = document.getElementById('result-description');
-        const restartButton = document.getElementById('restart-button');
-        
-        // Variáveis de estado do Quiz
+        // --- 3. Estado ---
         let currentQuestionIndex = 0;
-        let scores = {
-            inspiracao: 0,
-            ideacao: 0,
-            prototipacao: 0,
-            compartilhamento: 0
-        };
-        let answerHistory = []; // Para salvar o histórico de respostas
+        let scores = { inspiracao: 0, ideacao: 0, prototipacao: 0, compartilhamento: 0 };
+        let answerHistory = [];
 
-        // Função para iniciar ou reiniciar o quiz
+        // --- 4. Funções ---
+        
+        function showScreen(screenId) {
+            // Esconde todas
+            [startView, quizView, resultView].forEach(el => el.classList.add('hidden-view'));
+            // Mostra a desejada
+            document.getElementById(screenId).classList.remove('hidden-view');
+        }
+
         function startQuiz() {
             currentQuestionIndex = 0;
             scores = { inspiracao: 0, ideacao: 0, prototipacao: 0, compartilhamento: 0 };
             answerHistory = [];
-            
-            resultView.classList.add('hidden-view');
-            quizView.classList.remove('hidden-view');
-            
+            showScreen('quiz-view');
             showQuestion();
         }
 
-        // Função para mostrar a pergunta atual
         function showQuestion() {
-            // Limpa botões antigos
+            // Atualiza contadores
+            currentQNum.innerText = currentQuestionIndex + 1;
+            totalQNum.innerText = questions.length;
+
+            // Limpa botões
             answerButtons.innerHTML = '';
             
-            // Pega a pergunta atual
-            const question = questions[currentQuestionIndex];
-            questionText.innerHTML = question.question;
+            const q = questions[currentQuestionIndex];
+            questionText.innerText = q.question;
 
-            // Define o caminho da imagem
-            const imageUrl = question.image;
-            if (imageUrl) {
-                questionImage.src = imageUrl;
+            // Imagem (usa onerror no HTML para fallback se o arquivo local não existir)
+            if (q.image) {
+                questionImage.src = q.image;
                 questionImage.classList.remove('hidden-view');
+                // Adiciona fallback genérico caso a imagem local não carregue
+                questionImage.onerror = function() { 
+                    this.src = `https://placehold.co/600x300/eeeeee/999999?text=Imagem+da+Pergunta+${currentQuestionIndex+1}`; 
+                };
             } else {
                 questionImage.classList.add('hidden-view');
             }
 
-            // Cria os botões de resposta
-            question.answers.forEach(answer => {
-                const button = document.createElement('button');
-                button.innerHTML = answer.text;
-                button.classList.add(
-                    'w-full', 'bg-gray-100', 'hover:bg-[#ff3333]', 'hover:text-white', 
-                    'text-gray-800', 'font-medium', 'py-3', 'px-5', 'rounded-lg', 
-                    'transition-colors', 'duration-200', 'text-left', 'border', 'border-gray-200'
-                );
-                
-                // Adiciona o evento de clique
-                button.addEventListener('click', () => selectAnswer(answer.profile));
-                answerButtons.appendChild(button);
+            // Gera botões
+            q.answers.forEach(ans => {
+                const btn = document.createElement('button');
+                btn.innerText = ans.text;
+                btn.className = 'w-full text-left bg-gray-50 hover:bg-[#ff3333] hover:text-white text-gray-700 font-medium py-4 px-6 rounded-xl transition-all duration-200 border border-gray-200 hover:border-[#ff3333] shadow-sm hover:shadow-md';
+                btn.onclick = () => selectAnswer(ans.profile);
+                answerButtons.appendChild(btn);
             });
 
-            // Atualiza o estado do botão "Voltar"
-            updatePrevButtonState();
+            // Botão Voltar
+            prevButton.style.opacity = currentQuestionIndex === 0 ? '0' : '1';
+            prevButton.style.pointerEvents = currentQuestionIndex === 0 ? 'none' : 'auto';
         }
 
-        // Função chamada ao selecionar uma resposta
         function selectAnswer(profile) {
             scores[profile]++;
-            answerHistory.push(profile); // Salva a resposta
+            answerHistory.push(profile);
             currentQuestionIndex++;
 
             if (currentQuestionIndex < questions.length) {
@@ -280,70 +320,46 @@
             }
         }
 
-        // Função para voltar à pergunta anterior
-        function previousQuestion() {
+        function prevQuestion() {
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
-                
-                // Remove a última resposta da pontuação
-                const lastAnswerProfile = answerHistory.pop();
-                if (lastAnswerProfile) {
-                    scores[lastAnswerProfile]--;
-                }
-                
+                const lastProfile = answerHistory.pop();
+                scores[lastProfile]--;
                 showQuestion();
             }
         }
 
-        // Função para habilitar/desabilitar o botão "Voltar"
-        function updatePrevButtonState() {
-            if (currentQuestionIndex === 0) {
-                prevButton.disabled = true;
-                prevButton.classList.add('opacity-50', 'cursor-not-allowed');
-            } else {
-                prevButton.disabled = false;
-                prevButton.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
-        }
-
-        // Função para calcular e mostrar o resultado
         function showResult() {
-            // Encontra o perfil com maior pontuação
-            let maxScore = -1;
-            let resultProfile = '';
+            showScreen('result-view');
 
-            for (const profile in scores) {
-                if (scores[profile] > maxScore) {
-                    maxScore = scores[profile];
-                    resultProfile = profile;
+            // Calcula vencedor
+            let max = -1;
+            let winner = 'inspiracao';
+            for (let p in scores) {
+                if (scores[p] > max) {
+                    max = scores[p];
+                    winner = p;
                 }
             }
 
-            // Pega os dados do perfil vencedor
-            const result = resultsData[resultProfile];
-
-            // Atualiza o HTML da visão de resultado
-            resultTitle.innerText = result.title;
-            resultFocus.innerText = result.focus;
-            resultDescription.innerText = result.description;
+            const data = resultsData[winner];
+            document.getElementById('result-title').innerText = data.title;
+            const focusEl = document.getElementById('result-focus');
+            focusEl.innerText = data.focus;
             
-            // Remove classes de cor antigas e adiciona a nova
-            resultFocus.className = 'font-title text-xl font-semibold mb-6'; // Reseta
-            resultFocus.classList.add(result.colorClass);
-
-            // Esconde o quiz e mostra o resultado
-            quizView.classList.add('hidden-view');
-            resultView.classList.remove('hidden-view');
+            // Reseta cores e aplica a do vencedor
+            focusEl.className = `font-title text-xl font-semibold ${data.colorClass}`;
+            
+            document.getElementById('result-description').innerText = data.description;
         }
 
-        // --- 5. Inicialização ---
+        // --- 5. Eventos ---
+        document.getElementById('start-btn').addEventListener('click', startQuiz);
+        document.getElementById('restart-button').addEventListener('click', () => showScreen('start-view'));
+        prevButton.addEventListener('click', prevQuestion);
 
-        // Adiciona o evento de clique nos botões de navegação
-        restartButton.addEventListener('click', startQuiz); 
-        prevButton.addEventListener('click', previousQuestion);
-
-        // Inicia o quiz assim que a página carrega
-        document.addEventListener('DOMContentLoaded', startQuiz);
+        // Inicializa na tela de Início
+        showScreen('start-view');
 
     </script>
 </body>
