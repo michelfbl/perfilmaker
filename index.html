@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,60 +8,83 @@
     <!-- Carrega o Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Carrega as fontes (Baloo 2 para títulos, Sarabun para corpo) -->
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Sarabun:wght@400;600&display=swap"
+        rel="stylesheet">
     <style>
         /* Define as novas fontes */
         body {
             font-family: 'Sarabun', sans-serif;
         }
+
         .font-title {
             font-family: 'Baloo 2', sans-serif;
         }
+
         /* Estilo customizado para o card */
         .quiz-card {
             background-color: #ffffff;
         }
+
         /* Classe utilitária para esconder elementos */
         /* ADICIONADO !important para garantir que sobreponha o 'flex' do Tailwind */
         .hidden-view {
             display: none !important;
         }
+
         /* Animação suave de entrada */
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
+
 <body class="bg-[#5f356d] flex items-center justify-center min-h-screen p-4">
 
     <!-- Container Principal do Quiz -->
-    <div class="quiz-card w-full max-w-2xl p-8 md:p-12 rounded-2xl shadow-2xl transition-all duration-300 text-gray-900 relative overflow-hidden">
+    <div
+        class="quiz-card w-full max-w-2xl p-8 md:p-12 rounded-2xl shadow-2xl transition-all duration-300 text-gray-900 relative overflow-hidden">
 
         <!-- DECORAÇÃO DE FUNDO (Opcional, para dar um charme) -->
-        <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-[#ff3333] rounded-full opacity-10 pointer-events-none -z-10"></div>
-        <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-[#5f356d] rounded-full opacity-10 pointer-events-none"></div>
+        <div
+            class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-[#ff3333] rounded-full opacity-10 pointer-events-none -z-9">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-[#5f356d] rounded-full opacity-10 pointer-events-none">
+        </div>
 
         <!-- 0. TELA DE BOAS-VINDAS (NOVA) -->
         <div id="start-view" class="fade-in text-center flex flex-col items-center justify-center min-h-[400px]">
             <!-- Logo Grande -->
-            <img id="logo-start" src="./assets/logo.png" onerror="this.src='https://placehold.co/200x80/5f356d/ffffff?text=FAB+LAB+REC&font=roboto'" alt="Logo Fab Lab" class="mb-8 h-20 object-contain">
-            
+            <img id="logo-start" src="./assets/logo.png"
+                onerror="this.src='https://placehold.co/200x80/5f356d/ffffff?text=FAB+LAB+REC&font=roboto'"
+                alt="Logo Fab Lab" class="mb-8 h-20 object-contain">
+
             <h1 class="font-title text-4xl font-bold text-[#5f356d] mb-4">
                 Olá, Maker!
             </h1>
-            
+
             <p class="text-lg text-gray-600 mb-8 max-w-md">
-                A inovação acontece quando diferentes habilidades se encontram. Você está pronto para descobrir qual é o seu papel na <strong>Experiência Escalada</strong>?
+                A inovação acontece quando diferentes habilidades se encontram. Você está pronto para descobrir qual é o
+                seu papel na <strong>Experiência Escalada</strong>?
             </p>
 
-            <button id="start-btn" class="w-full sm:w-auto bg-[#ff3333] hover:bg-red-600 text-white font-title text-xl font-bold py-4 px-10 rounded-xl shadow-lg transform transition hover:scale-105 duration-200">
+            <button id="start-btn"
+                class="w-full sm:w-auto bg-[#ff3333] hover:bg-red-600 text-white font-title text-xl font-bold py-4 px-10 rounded-xl shadow-lg transform transition hover:scale-105 duration-200">
                 🚀 Começar Jornada
             </button>
-            
+
             <p class="text-sm text-gray-400 mt-8">Tempo estimado: 3 minutos</p>
         </div>
 
@@ -68,11 +92,14 @@
         <div id="quiz-view" class="hidden-view fade-in">
             <!-- Logo Pequeno (Cabeçalho) -->
             <div class="flex justify-center mb-6">
-                <img src="./assets/logo.png" onerror="this.src='https://placehold.co/150x50/5f356d/ffffff?text=FAB+LAB+REC'" alt="Logo Fab Lab" class="h-8 opacity-80">
+                <img src="./assets/logo.png"
+                    onerror="this.src='https://placehold.co/150x50/5f356d/ffffff?text=FAB+LAB+REC'" alt="Logo Fab Lab"
+                    class="h-16 md:h-20 object-contain">
             </div>
 
             <!-- Imagem da Pergunta -->
-            <img id="question-image" src="" alt="Ilustração" class="w-full h-48 object-cover rounded-xl mb-6 shadow-md hidden-view bg-gray-100">
+            <img id="question-image" src="" alt="Ilustração"
+                class="w-full h-48 object-cover rounded-xl mb-6 shadow-md hidden-view bg-gray-100">
 
             <!-- Contador de Perguntas -->
             <div class="text-xs font-bold text-[#ff3333] tracking-widest uppercase mb-2">
@@ -91,7 +118,8 @@
 
             <!-- Navegação -->
             <div class="flex justify-between mt-8 pt-6 border-t border-gray-100">
-                <button id="prev-button" class="text-gray-400 hover:text-gray-600 font-semibold py-2 px-4 rounded transition-colors flex items-center gap-2">
+                <button id="prev-button"
+                    class="text-gray-400 hover:text-gray-600 font-semibold py-2 px-4 rounded transition-colors flex items-center gap-2">
                     ← Voltar
                 </button>
             </div>
@@ -102,13 +130,13 @@
             <div class="mb-6 inline-block p-4 rounded-full bg-gray-50">
                 <span class="text-6xl">✨</span>
             </div>
-            
+
             <h2 class="text-gray-500 font-semibold tracking-wide uppercase text-sm mb-2">Seu Perfil Maker é</h2>
-            
+
             <h1 class="font-title text-3xl md:text-4xl font-bold mb-4 text-[#5f356d]" id="result-title">
                 <!-- Título do Resultado -->
             </h1>
-            
+
             <div class="inline-block px-4 py-1 rounded-full bg-gray-100 mb-6">
                 <p class="font-title text-lg font-semibold" id="result-focus">
                     <!-- Foco do Resultado -->
@@ -119,7 +147,8 @@
                 <!-- Descrição do Resultado -->
             </p>
 
-            <button id="restart-button" class="w-full bg-gray-800 hover:bg-gray-900 text-white font-bold py-4 px-6 rounded-xl transition-colors duration-200 font-title text-lg">
+            <button id="restart-button"
+                class="w-full bg-gray-800 hover:bg-gray-900 text-white font-bold py-4 px-6 rounded-xl transition-colors duration-200 font-title text-lg">
                 Refazer o Quiz
             </button>
         </div>
@@ -242,7 +271,7 @@
         const startView = document.getElementById('start-view');
         const quizView = document.getElementById('quiz-view');
         const resultView = document.getElementById('result-view');
-        
+
         const questionText = document.getElementById('question-text');
         const answerButtons = document.getElementById('answer-buttons');
         const questionImage = document.getElementById('question-image');
@@ -256,7 +285,7 @@
         let answerHistory = [];
 
         // --- 4. Funções ---
-        
+
         function showScreen(screenId) {
             // Esconde todas
             [startView, quizView, resultView].forEach(el => el.classList.add('hidden-view'));
@@ -279,7 +308,7 @@
 
             // Limpa botões
             answerButtons.innerHTML = '';
-            
+
             const q = questions[currentQuestionIndex];
             questionText.innerText = q.question;
 
@@ -288,8 +317,8 @@
                 questionImage.src = q.image;
                 questionImage.classList.remove('hidden-view');
                 // Adiciona fallback genérico caso a imagem local não carregue
-                questionImage.onerror = function() { 
-                    this.src = `https://placehold.co/600x300/eeeeee/999999?text=Imagem+da+Pergunta+${currentQuestionIndex+1}`; 
+                questionImage.onerror = function () {
+                    this.src = `https://placehold.co/600x300/eeeeee/999999?text=Imagem+da+Pergunta+${currentQuestionIndex + 1}`;
                 };
             } else {
                 questionImage.classList.add('hidden-view');
@@ -347,10 +376,10 @@
             document.getElementById('result-title').innerText = data.title;
             const focusEl = document.getElementById('result-focus');
             focusEl.innerText = data.focus;
-            
+
             // Reseta cores e aplica a do vencedor
             focusEl.className = `font-title text-xl font-semibold ${data.colorClass}`;
-            
+
             document.getElementById('result-description').innerText = data.description;
         }
 
@@ -364,4 +393,5 @@
 
     </script>
 </body>
+
 </html>
