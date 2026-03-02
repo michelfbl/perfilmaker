@@ -209,13 +209,14 @@
                 ]
             },
             {
-                question: "Sobre Brasília, o que mais te fascina?",
-                image: "./assets/q6.jpg",
+                // PERGUNTA ADAPTADA DE BRASÍLIA PARA O RECIFE
+                question: "Sobre o Recife, o que mais chama sua atenção e te fascina?",
+                image: "./assets/q6.jpg", // Lembre-se de trocar o arquivo da imagem para algo do Recife (ex: Pontes ou Galo da Madrugada)
                 answers: [
-                    { text: "A história e as motivações políticas de JK.", profile: "inspiracao" },
-                    { text: "A utopia de Niemeyer e Lúcio Costa. O desenho da cidade.", profile: "ideacao" },
-                    { text: "A engenharia. O desafio de erguer aqueles prédios no meio do nada.", profile: "prototipacao" },
-                    { text: "O movimento dos 'Candangos' que construíram a cidade juntos.", profile: "compartilhamento" }
+                    { text: "A rica história, a herança de Maurício de Nassau e as lendas urbanas que formam a identidade da cidade.", profile: "inspiracao" },
+                    { text: "A capacidade de inovar, como o movimento Manguebeat (misturando tradição e tecnologia) ou o ecossistema do Porto Digital.", profile: "ideacao" },
+                    { text: "A arquitetura desafiadora e a engenharia das antigas pontes que conectam a cidade cortada por rios e mangues.", profile: "prototipacao" },
+                    { text: "A energia absurda das pessoas no Carnaval, construindo juntas a maior festa de rua do mundo no Galo da Madrugada.", profile: "compartilhamento" }
                 ]
             },
             {
@@ -232,10 +233,54 @@
                 question: "Sábado livre com R$ 50,00. Qual o rolê?",
                 image: "./assets/q8.jpg",
                 answers: [
-                    { text: "Museu, livraria ou visitar um bairro histórico.", profile: "inspiracao" },
-                    { text: "Loja de artesanato ou papelaria para um projeto criativo.", profile: "ideacao" },
-                    { text: "Loja de ferramentas para consertar algo em casa.", profile: "prototipacao" },
-                    { text: "Juntar com os amigos para comer ou fazer algo em casa.", profile: "compartilhamento" }
+                    { text: "Museu, livraria ou visitar um bairro histórico (como o Recife Antigo).", profile: "inspiracao" },
+                    { text: "Loja de artesanato ou papelaria para iniciar um projeto criativo.", profile: "ideacao" },
+                    { text: "Loja de ferramentas para comprar material e consertar algo em casa.", profile: "prototipacao" },
+                    { text: "Juntar com os amigos para comer algo ou resenhar em casa.", profile: "compartilhamento" }
+                ]
+            },
+            {
+                // NOVA PERGUNTA 1: CHUVA E ALAGAMENTO
+                question: "Caiu um toró, o Recife alagou e você não consegue atravessar a rua. Como você age?",
+                image: "./assets/q9.jpg", 
+                answers: [
+                    { text: "Tento entender o sistema de drenagem daquela rua específica e a maré do rio para saber a raiz do problema.", profile: "inspiracao" },
+                    { text: "Começo a imaginar ideias loucas, tipo calçadas permeáveis gigantes ou um sistema de captação de água pluvial nas casas.", profile: "ideacao" },
+                    { text: "Pego uns tijolos, pedaços de madeira e improviso uma passarela no 'desenrolo' pra galera não molhar o pé.", profile: "prototipacao" },
+                    { text: "Crio um grupo de WhatsApp com os vizinhos para mapear os piores pontos e cobrar a prefeitura coletivamente.", profile: "compartilhamento" }
+                ]
+            },
+            {
+                // NOVA PERGUNTA 2: TAPIOCA/CULTURA LOCAL
+                question: "Você vai fazer um lanche para a galera e decide fazer tapioca. Qual sua abordagem?",
+                image: "./assets/q10.jpg",
+                answers: [
+                    { text: "Pesquiso a origem das receitas mais tradicionais para entender o ponto perfeito da goma.", profile: "inspiracao" },
+                    { text: "Invento um recheio agridoce totalmente inusitado (tipo charque com geleia de pimenta) que ninguém testou.", profile: "ideacao" },
+                    { text: "Vou testando a temperatura da frigideira na prática e jogando a massa até acertar a crocância exata no erro e acerto.", profile: "prototipacao" },
+                    { text: "Transformo a cozinha numa linha de montagem e coloco cada amigo responsável por ralar queijo ou cuidar de um recheio.", profile: "compartilhamento" }
+                ]
+            },
+            {
+                // NOVA PERGUNTA 3: MÓVEL DESMONTADO
+                question: "Você comprou um móvel que veio desmontado e o manual é super confuso.",
+                image: "./assets/q11.jpg",
+                answers: [
+                    { text: "Vou direto pro YouTube procurar um tutorial de alguém montando o mesmo modelo e entendo a lógica primeiro.", profile: "inspiracao" },
+                    { text: "Ignoro o manual e começo a imaginar se dá para montar as peças de um jeito diferente, criando um móvel novo.", profile: "ideacao" },
+                    { text: "Pego a chave de fenda e vou testando o encaixe das peças na prática. Se der errado, eu desmonto e refaço.", profile: "prototipacao" },
+                    { text: "Chamo alguém de casa, coloco uma música e transformo a montagem numa atividade em dupla.", profile: "compartilhamento" }
+                ]
+            },
+            {
+                // NOVA PERGUNTA 4: MARATONA DE IDEIAS (HACKATHON)
+                question: "Você está participando de uma maratona de criação (tipo no Porto Digital). Qual o seu papel natural na equipe?",
+                image: "./assets/q12.jpg",
+                answers: [
+                    { text: "Aquele que vai para a rua entrevistar potenciais usuários para garantir que o grupo está resolvendo um problema real.", profile: "inspiracao" },
+                    { text: "A máquina de fazer brainstorm, colando post-its com ideias 'fora da caixinha' por todo lado.", profile: "ideacao" },
+                    { text: "Aquele que abre o computador ou os materiais e já começa a programar ou construir a 'cara' do projeto para testar.", profile: "prototipacao" },
+                    { text: "Aquele que organiza quem faz o quê, prepara a apresentação e anima a equipe quando bate o cansaço.", profile: "compartilhamento" }
                 ]
             }
         ];
@@ -256,13 +301,13 @@
             prototipacao: {
                 title: "O Construtor Mão na Massa",
                 focus: "Foco em Construir e Prototipar",
-                description: "Você é o motor da realização! Seu superpoder é transformar ideias em ação. Você adora 'aprender fazendo', testar materiais e usar ferramentas para tornar o futuro palpável.",
+                description: "Você é o motor da realização! Seu superpoder é transformar ideias em ação. Você adora 'aprender fazendo', testar materiais e usar ferramentas para tornar o futuro palpável. Mestre do desenrolo!",
                 colorClass: "text-[#90851c]"
             },
             compartilhamento: {
                 title: "O Conector Colaborativo",
                 focus: "Foco em Compartilhar e Mobilizar",
-                description: "Você é a voz do time! Seu superpoder é a empatia e o protagonismo. Você une o grupo, garante que todos sejam ouvidos e sabe como comunicar uma ideia para engajar.",
+                description: "Você é a voz do time! Seu superpoder é a empatia e o protagonismo. Você une o grupo, garante que todos sejam ouvidos e sabe como comunicar uma ideia para engajar todo mundo.",
                 colorClass: "text-[#ff3333]"
             }
         };
